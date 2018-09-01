@@ -33,7 +33,21 @@ namespace anpi {
   bmt::polynomial<T> deflate(const bmt::polynomial<T>& poly,
                              const T& root,
                              T& residuo,
-                             T& tolerance=anpi::epsilon<T>());
+                             T& tolerance=anpi::epsilon<T>())
+  {
+    int n = poly.size() - 1;
+    residuo = poly[n];
+    polynomial<T> a = poly;
+    a[n] = 0;
+    T s = T(0);
+    for (int i = n - 1; i >= 0; --i)
+    {
+      s = a[i];
+      a[i] = residuo;
+      residuo = s + residuo * root;
+    }
+    return a;
+  }
 
   /**
    * Deflate polynomial with a second order polynomial.
@@ -46,10 +60,36 @@ namespace anpi {
    * @return deflated polynomial
    */
   template<class T>
-  bmt::polynomial<T> deflate2(const bt::polynomial<T>& poly,
+  bmt::polynomial<T> deflate2(const bmt::polynomial<T>& poly,
                               const std::complex<T>& root,
-                              bt::polynomial<T>& residuo,
-                              T& tolerance=anpi::epsilon<T>());
+                              bmt::polynomial<T>& residuo,
+                              T& tolerance=anpi::epsilon<T>())
+  {
+    T real = std::real(root);
+    T imag = std::imag(root);
+    //get the quadratic divident from root
+    const polynomial<T> rootDiv = {{real*real + imag*imag, -2 * real, 1}}; 
+    int nv = rootDiv.size() -1 ;
+    int n = poly.size() - 1;
+    residuo = poly; 
+    polynomial<T> quotient = poly;
+    for (int i = 0; i < poly.size(); ++i){
+      quotient[i] = 0.;
+    }
+    for (int k = n - nv ; k >=0; --k){
+      std::cout << "k: " << k << " nv: " << nv << std::endl;
+      quotient[k] = residuo[nv+k];
+      for (int j = nv + k - 1; j >= k; --j){
+        std::cout << "j: " << j << std::endl;
+        residuo[j] -= quotient[k]*rootDiv[j-k];
+      }
+    }
+    //add trailing zeros to residuo
+    for (int j = nv; j <= n; ++j){
+      residuo[nv] = T(0.0);
+    }
+    return quotient;
+  }
 
   
 }
