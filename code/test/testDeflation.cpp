@@ -15,6 +15,10 @@
 #include <string>
 #include <sstream>
 
+#include <type_traits>
+
+#include <boost/type_traits/is_complex.hpp>
+
 #include <Deflation.hpp>
 
 namespace bmt=boost::math::tools; // for polynomial
@@ -36,7 +40,7 @@ BOOST_AUTO_TEST_CASE ( DegreeOfPoly ) {
 
 BOOST_AUTO_TEST_CASE( BasicDeflation ) {
 	
-	//Basic Test
+	//Basic Test <Float>
 	bmt::polynomial<float> p0 = {{-189.f, -57.f, 5.f, 1.f}};
 	bmt::polynomial<float> re = {{-21.f, -4.f, 1.f}};
 
@@ -52,9 +56,51 @@ BOOST_AUTO_TEST_CASE( BasicDeflation ) {
 			check=1;
 		}
 	}
-	
+
 	BOOST_CHECK(check == 0);
+
+	//Basic Test <Double>
+	bmt::polynomial<double> p1 = {{-189.f, -57.f, 5.f, 1.f}};
+	bmt::polynomial<double> re2 = {{-21.f, -4.f, 1.f}};
+
+	double droot = -9;
+	double dresi = 0;
+	double depsi = 0;
+	int check2 = 0;
 	
+	bmt::polynomial<double> r1 = anpi::deflate<double>(p1, droot, dresi, depsi);
+
+	for (int i = r1.size()-1; i>=0; --i) {
+		if (re2[i]==r1[i]) {
+			check2=1;
+		}
+	}
+	
+	BOOST_CHECK(check2 == 0);
+	
+}
+
+BOOST_AUTO_TEST_CASE( ComplexDeflation ) {
+	
+	//Basic Test <Float>
+	//bmt::polynomial< dcomplex >: {{1., 0., dcomplex(-2,1), 0., 0., dcomplex(0,3.f)}};
+	bmt::polynomial<fcomplex> p0 = {{10., 6., 1.}};
+	bmt::polynomial<fcomplex> re = {{0.}};
+
+	fcomplex root = (3,-1);
+	bmt::polynomial<fcomplex> resi = {{0.}};
+	fcomplex epsi = 0;
+	int check = 0;
+	
+	bmt::polynomial<fcomplex> r0 = anpi::deflate2<fcomplex>(p0, root, resi, epsi);
+
+	for (int i = r0.size()-1; i>=0; --i) {
+		if (re[i]==r0[i]) {
+			check=1;
+		}
+	}
+
+	BOOST_CHECK(check == 0);
 }
 	
 	/*

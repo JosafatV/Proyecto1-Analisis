@@ -12,6 +12,7 @@
 #define ANPI_DEFLATION_HPP
 
 #include <vector>
+#include <complex>
 #include <type_traits>
 
 #include <boost/type_traits/is_complex.hpp>
@@ -68,7 +69,8 @@ namespace anpi {
     T real = std::real(root);
     T imag = std::imag(root);
     //get the quadratic divident from root
-    const bmt::polynomial<T> rootDiv = {{real*real + imag*imag, -2 * real, 1}}; 
+    T nDos = std::real(-2);
+    const bmt::polynomial<T> rootDiv = {{real*real + imag*imag, nDos * real, 1}}; 
     int nv = rootDiv.size() -1 ;
     int n = poly.size() - 1;
     residuo = poly; 
