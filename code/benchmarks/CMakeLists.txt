@@ -4,6 +4,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include ${Boost_INCLUDE_DIRS})
 set (CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+#banderas del gprof
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 
 if(MSVC)
   # Force to always compile with W4
