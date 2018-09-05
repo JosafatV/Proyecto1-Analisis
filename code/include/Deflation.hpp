@@ -17,7 +17,6 @@
 #include <boost/type_traits/is_complex.hpp>
 #include <boost/math/tools/polynomial.hpp>
 
-
 namespace anpi {
   namespace bmt=boost::math::tools; // bt as alias for boost::math::tools
   
@@ -33,20 +32,21 @@ namespace anpi {
   bmt::polynomial<T> deflate(const bmt::polynomial<T>& poly,
                              const T& root,
                              T& residuo,
-                             T& tolerance=anpi::epsilon<T>())
+                             T& tolerance=bmt::epsilon<T>())
   {
-    int n = poly.size() - 1;
+    int n = poly.size()-1; 	// get degree of poly
     residuo = poly[n];
-    polynomial<T> a = poly;
-    a[n] = 0;
+    bmt::polynomial<T> a = poly;
+    a[n] = 0; 			//set degree of a = n-1
     T s = T(0);
-    for (int i = n - 1; i >= 0; --i)
+    //Horner's method for synthetic divition
+    for (int i=n-1; i>=0; --i)
     {
-      s = a[i];
-      a[i] = residuo;
+      s = a[i];				//store to overwrite
+      a[i] = residuo;		
       residuo = s + residuo * root;
     }
-    return a;
+    return poly;
   }
 
   /**
@@ -63,16 +63,16 @@ namespace anpi {
   bmt::polynomial<T> deflate2(const bmt::polynomial<T>& poly,
                               const std::complex<T>& root,
                               bmt::polynomial<T>& residuo,
-                              T& tolerance=anpi::epsilon<T>())
+                              T& tolerance=bmt::epsilon<T>())
   {
     T real = std::real(root);
     T imag = std::imag(root);
     //get the quadratic divident from root
-    const polynomial<T> rootDiv = {{real*real + imag*imag, -2 * real, 1}}; 
+    const bmt::polynomial<T> rootDiv = {{real*real + imag*imag, -2 * real, 1}}; 
     int nv = rootDiv.size() -1 ;
     int n = poly.size() - 1;
     residuo = poly; 
-    polynomial<T> quotient = poly;
+    bmt::polynomial<T> quotient = poly;
     for (int i = 0; i < poly.size(); ++i){
       quotient[i] = 0.;
     }
