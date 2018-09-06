@@ -77,7 +77,27 @@ BOOST_AUTO_TEST_CASE( BasicDeflation ) {
 	}
 	
 	BOOST_CHECK(check2 == 0);
+}
+
+BOOST_AUTO_TEST_CASE( DecimalDeflation ) {
 	
+	bmt::polynomial<float> p0 = {{180, 72.8575, 5.33825, 0.2731}}; //added 0.0001 error to x^3
+	bmt::polynomial<float> re = {{22.5, -9.75, 1}};
+	
+	float root = -3.75;
+	float resi = 0;
+	float epsi = 0;
+	int check = 0;
+	
+	bmt::polynomial<float> r0 = anpi::deflate<float>(p0, root, resi, epsi);
+	
+	for (int i = r0.size()-1; i>=0; --i) {
+		if (re[i]==r0[i]) {
+			check=1;
+		}
+	}
+	
+	BOOST_CHECK(check == 0);
 }
 
 BOOST_AUTO_TEST_CASE( ComplexDeflation ) {

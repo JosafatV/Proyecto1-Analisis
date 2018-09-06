@@ -19,7 +19,7 @@
 #include <boost/math/tools/polynomial.hpp>
 
 namespace anpi {
-  namespace bmt=boost::math::tools; // bt as alias for boost::math::tools
+  namespace bmt=boost::math::tools; // bmt as alias for boost::math::tools
   
   /**
    * Deflate polynomial
@@ -79,10 +79,10 @@ namespace anpi {
       quotient[i] = 0.;
     }
     for (int k = n - nv ; k >=0; --k){
-      std::cout << "k: " << k << " nv: " << nv << std::endl;
+      //std::cout << "k: " << k << " nv: " << nv << std::endl;
       quotient[k] = residuo[nv+k];
       for (int j = nv + k - 1; j >= k; --j){
-        std::cout << "j: " << j << std::endl;
+        //std::cout << "j: " << j << std::endl;
         residuo[j] -= quotient[k]*rootDiv[j-k];
       }
     }
