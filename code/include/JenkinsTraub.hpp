@@ -32,7 +32,9 @@ namespace anpi {
    */
   template<class T,class U>
   void jenkinsTraub(const bmt::polynomial<T>& poly,
-                    std::vector<U>& roots) {
+                    std::vector<U>& roots,
+              const PolishEnum polish=DoNotPolish,
+              const U start=U()) {
     
     static_assert(std::is_floating_point<T>::value ||
                   boost::is_complex<T>::value,
@@ -40,6 +42,27 @@ namespace anpi {
     static_assert(std::is_floating_point<U>::value ||
                   boost::is_complex<U>::value,
                   "U must be floating point or complex");
+
+/*     int n = poly.size()-1; 	
+    T p = 0;
+    T df = 0;
+    for(int k=n; n >= 0; n--){
+      //df = df*U + p;
+      //p = p*U + poly[k];
+    } */
+
+    //Etapa1
+   /*  T H[n] = ;
+    H[0] = df;
+    n = poly.size(); 	
+    for(int i = 0; i < 6; i++){//se recomienda iterar 5 veces minimo
+      for(int j = 0; j < n; j++){
+        H[j+1] = poly[j]-H[j]*(H[j])/poly[0]
+      }
+    } */
+   /*  //Etapa2
+    //T sk = 
+    //Etapa3 */
 
     throw Exception("Not implemented yet!");
   }
